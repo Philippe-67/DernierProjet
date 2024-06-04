@@ -1,0 +1,62 @@
+﻿@model IEnumerable<MSUI.Models.Patient>
+
+@{
+    ViewData["Title"] = "Liste des Patients";
+}
+
+<a href="@Url.Action("Create", "Patient")" class="btn btn-primary">Créer un nouveau Patient</a>
+
+<h2>@ViewData["Title"]</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Prenom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Nom)
+            </th>
+            @if (User.IsInRole("praticien"))
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.First().RiskLevel)
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Prenom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nom)
+                    </td>
+                    @if (User.IsInRole("praticien"))
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RiskLevel)
+                        </td>
+                    }
+                    @if (User.IsInRole("organisateur"))
+                    {
+                        <td>
+                            <a asp-action="Detail" asp-route-id="@item.Id">Detail</a>
+                        </td>
+                    }
+                    @if (User.IsInRole("praticien"))
+                    {
+                        <td>
+                            @* <a asp-action="Note" asp-route-id="@item.Id">Notes patients</a>*@
+                            <a href="@Url.Action("Index", "Note", new { patId=item.Id})">Lien vers les notes du patient</a>
+                        </td>
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>
