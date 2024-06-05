@@ -36,6 +36,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Nom)
                     </td>
+                  @*   <td>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+                    </td> *@
                     @if (User.IsInRole("praticien"))
                     {
                         <td>
@@ -46,16 +49,26 @@
                     {
                         <td>
                             <a asp-action="Detail" asp-route-id="@item.Id">Detail</a>
+                            
                         </td>
                     }
                     @if (User.IsInRole("praticien"))
                     {
                         <td>
+                            
+
                             @* <a asp-action="Note" asp-route-id="@item.Id">Notes patients</a>*@
                             <a href="@Url.Action("Index", "Note", new { patId=item.Id})">Lien vers les notes du patient</a>
                         </td>
                     }
+                  
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+                        </td>
+                  
+                    
                 </tr>
+               
             }
         }
     </tbody>

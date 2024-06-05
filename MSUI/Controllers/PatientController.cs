@@ -81,15 +81,6 @@ namespace MSUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Patient patient)
         {
-            //HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/Patient", patient);
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    return RedirectToAction("GetAllPatients");
-            //}
-            //else
-            //{
-            //    return View("Error");
-            //}
             if (!ModelState.IsValid)
             {
                 return View(patient); // Retourne la vue avec les erreurs de validation
@@ -123,12 +114,12 @@ namespace MSUI.Controllers
             }
         }
 
-        public async Task<IActionResult> DeletePatient(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             HttpResponseMessage response = await _httpClient.DeleteAsync($"api/Patient/{id}");
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("GetAllPatients");
+                return RedirectToAction("Index");
             }
             else
             {
