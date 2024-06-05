@@ -19,6 +19,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MSUI.Models;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace MSUI.Controllers
 {
@@ -65,16 +66,47 @@ namespace MSUI.Controllers
             }
         }
 
-        public async Task<IActionResult> CreatePatient(Patient patient)
+        ///// <summary>
+        /////permet d' afficher le formulaire "Create"
+        ///// </summary>
+        ///// <param name="patient"></param>
+        ///// <returns></returns>
+        /// 
+        [HttpGet]
+        public IActionResult Create()
         {
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/Patient", patient);
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Patient patient)
+        {
+            //HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/Patient", patient);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    return RedirectToAction("GetAllPatients");
+            //}
+            //else
+            //{
+            //    return View("Error");
+            //}
+            if (!ModelState.IsValid)
+            {
+                return View(patient); // Retourne la vue avec les erreurs de validation
+            }
+
+            var json = JsonConvert.SerializeObject(patient);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync("/api/Patient", content);
+
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("GetAllPatients");
+                return RedirectToAction("Index");
             }
             else
             {
-                return View("Error");
+                string errorMessage = await response.Content.ReadAsStringAsync();
+                return StatusCode((int)response.StatusCode, $"Erreur HTTP: {response.StatusCode}. Détails : {errorMessage}");
             }
         }
 

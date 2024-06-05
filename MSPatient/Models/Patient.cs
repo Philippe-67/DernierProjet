@@ -16,7 +16,6 @@ namespace MSPatient.Models
         [Required(ErrorMessage = "Le genre est requis")]
         public string Genre { get; set; }
         public string Adresse { get; set; }
-        public string Tel { get; set; 
-
+        public string Tel { get; set; }
     }
 }
